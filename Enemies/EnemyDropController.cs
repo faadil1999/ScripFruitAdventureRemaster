@@ -2,19 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyDropController : MonoBehaviour
+namespace AdventureFruit
 {
-    [SerializeField] private GameObject fruit;
-    [Range(2,10)]
-    [SerializeField] private int dropAmount;
-
-    public void DropFruits()
+    public class EnemyDropController : MonoBehaviour
     {
-        for (int i = 0; i < dropAmount; i++)
+        [SerializeField] private GameObject fruit;
+        [Range(2,10)]
+        [SerializeField] private int dropAmount;
+
+        public void DropFruits()
         {
-            GameObject droppedFruit = Instantiate(fruit, transform.position, transform.rotation);
-            Destroy(droppedFruit, 5);
+            for (int i = 0; i < dropAmount; i++)
+            {
+                GameObject droppedFruit = Instantiate(fruit, transform.position, transform.rotation);
+                Destroy(droppedFruit, 5);
+            }
         }
+
     }
- 
 }

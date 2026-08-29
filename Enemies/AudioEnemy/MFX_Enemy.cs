@@ -2,20 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MFX_Enemy : MonoBehaviour
+namespace AdventureFruit
 {
-    [SerializeField] private AudioSource sourceFx;
-    [SerializeField] private AudioClip[] clipFx;
-
-    void SFXStep1()
+    public class MFX_Enemy : MonoBehaviour
     {
-        sourceFx.clip = clipFx[0];
-        sourceFx.Play();
-    }
+        [SerializeField] private AudioSource sourceFx;
+        [SerializeField] private AudioClip[] clipFx;
 
-    void SFXStep2()
-    {
-        sourceFx.clip = clipFx[1];
-        sourceFx.Play();
+        void SFXStep1()
+        {
+            sourceFx.clip = clipFx[0];
+            sourceFx.Play();
+        }
+
+        void SFXStep2()
+        {
+            sourceFx.clip = clipFx[1];
+            sourceFx.Play();
+        }
     }
 }

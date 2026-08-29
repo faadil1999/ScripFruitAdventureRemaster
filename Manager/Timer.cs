@@ -3,18 +3,21 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class Timer : MonoBehaviour
+namespace AdventureFruit
 {
-    [SerializeField] private TextMeshProUGUI timerText;
-    // Start is called before the first frame update
-    void Start()
+    public class Timer : MonoBehaviour
     {
-        timerText = GetComponent<TextMeshProUGUI>();  
-    }
+        [SerializeField] private TextMeshProUGUI timerText;
+        // Start is called before the first frame update
+        void Start()
+        {
+            timerText = GetComponent<TextMeshProUGUI>();  
+        }
 
-    // Update is called once per frame
-    void Update()
-    {
-        timerText.text = "Timer: " + GameManager.instance.timer.ToString("00")+ " s";
+        // Update is called once per frame
+        void Update()
+        {
+            timerText.text = "Timer: " + GameManager.instance.timer.ToString("00")+ " s";
+        }
     }
 }

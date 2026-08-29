@@ -2,37 +2,40 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Swither_trap : MonoBehaviour
+namespace AdventureFruit
 {
-    // Start is called before the first frame update
-                     private Trap_fire mytrap;
-                     private Animator anim;
-                     private float couldDown;
-    [SerializeField] private float timeNoActive = 2;
-
-
-    private void Start()
+    public class Swither_trap : MonoBehaviour
     {
-       
-        anim = GetComponent<Animator>();
-        mytrap = GetComponentInChildren<Trap_fire>();
-    }
+        // Start is called before the first frame update
+                         private Trap_fire mytrap;
+                         private Animator anim;
+                         private float couldDown;
+        [SerializeField] private float timeNoActive = 2;
 
-    private void Update()
-    {
-        couldDown -= Time.deltaTime;
-    }
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if(couldDown > 0) { return; }
-
-        if(collision.GetComponent<Player>()!= null) 
+        private void Start()
         {
-            couldDown = timeNoActive;
-            anim.SetTrigger("pressed"); 
-            mytrap.FireSwitchOnTime(timeNoActive);
-        }
-    }
 
+            anim = GetComponent<Animator>();
+            mytrap = GetComponentInChildren<Trap_fire>();
+        }
+
+        private void Update()
+        {
+            couldDown -= Time.deltaTime;
+        }
+
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            if(couldDown > 0) { return; }
+
+            if(collision.GetComponent<Player>()!= null) 
+            {
+                couldDown = timeNoActive;
+                anim.SetTrigger("pressed"); 
+                mytrap.FireSwitchOnTime(timeNoActive);
+            }
+        }
+
+    }
 }

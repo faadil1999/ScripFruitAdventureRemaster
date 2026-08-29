@@ -1,0 +1,20 @@
+{
+    "name": "AdventureFruit",
+    "rootNamespace": "AdventureFruit",
+    "references": [
+        "AdventureFruit.Core",
+        "JoystickPack",
+        "Cinemachine",
+        "Unity.TextMeshPro",
+        "Unity.RenderPipelines.Universal.Runtime"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

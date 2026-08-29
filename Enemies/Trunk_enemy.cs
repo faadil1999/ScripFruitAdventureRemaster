@@ -1,120 +1,123 @@
 using UnityEngine;
 
-public class Trunk_enemy : Enemy
+namespace AdventureFruit
 {
-    [Header("Trunks specific")]
-    [SerializeField] private float moveBackTime;
-    private float moveBackTimeCounter;
-
-    private bool wallBehind;
-    private bool groundBehind;
-
-    private bool playerDetected;
-
-    [Header("Collision specific")]
-    [SerializeField] private float checkRadius;
-    [SerializeField] private LayerMask whatIsPlayer;
-    [SerializeField] private GameObject bulletprefab;
-    [SerializeField] private Transform shoot_position;
-    [SerializeField] private Transform groundBehindCheck;
-        
-
-    [Header("Bullet specific")]
-
-    [SerializeField] private float attackCooldown;
-    [SerializeField] private float bulletSpeed;
-    private float attackCooldownCounter;
-    // Start is called before the first frame update
-    protected override void Start()
+    public class Trunk_enemy : Enemy
     {
-        base.Start();
-    }
+        [Header("Trunks specific")]
+        [SerializeField] private float moveBackTime;
+        private float moveBackTimeCounter;
+
+        private bool wallBehind;
+        private bool groundBehind;
+
+        private bool playerDetected;
+
+        [Header("Collision specific")]
+        [SerializeField] private float checkRadius;
+        [SerializeField] private LayerMask whatIsPlayer;
+        [SerializeField] private GameObject bulletprefab;
+        [SerializeField] private Transform shoot_position;
+        [SerializeField] private Transform groundBehindCheck;
 
 
-    // Update is called once per frame
-    void Update()
-    {
-        CollisionCheck();
+        [Header("Bullet specific")]
 
-        if (!canMove)
+        [SerializeField] private float attackCooldown;
+        [SerializeField] private float bulletSpeed;
+        private float attackCooldownCounter;
+        // Start is called before the first frame update
+        protected override void Start()
         {
-            rb.velocity = new Vector2(0, 0);
+            base.Start();
         }
-      
-        attackCooldownCounter -= Time.deltaTime;
-        moveBackTimeCounter -= Time.deltaTime;
 
-        if (playerDetected && moveBackTimeCounter < 0 )
+
+        // Update is called once per frame
+        void Update()
         {
-            moveBackTimeCounter = moveBackTime;
-        }
-    
-        if (playerDetection.collider.GetComponent<Player>() != null)
-        {
-            if (attackCooldownCounter < 0)
+            CollisionCheck();
+
+            if (!canMove)
             {
-                attackCooldownCounter = attackCooldown;
-                anim.SetTrigger("attack");
-                canMove = false;
+                rb.velocity = new Vector2(0, 0);
             }
-            else if (playerDetection.distance < 3)
+
+            attackCooldownCounter -= Time.deltaTime;
+            moveBackTimeCounter -= Time.deltaTime;
+
+            if (playerDetected && moveBackTimeCounter < 0 )
             {
-                MoveBackWards(1.5f);
+                moveBackTimeCounter = moveBackTime;
             }
-        }
-        else
-        {
-            if (moveBackTimeCounter > 0)
+
+            if (playerDetection.collider.GetComponent<Player>() != null)
             {
-                MoveBackWards(4);
+                if (attackCooldownCounter < 0)
+                {
+                    attackCooldownCounter = attackCooldown;
+                    anim.SetTrigger("attack");
+                    canMove = false;
+                }
+                else if (playerDetection.distance < 3)
+                {
+                    MoveBackWards(1.5f);
+                }
             }
             else
             {
-                WalkAround();
+                if (moveBackTimeCounter > 0)
+                {
+                    MoveBackWards(4);
+                }
+                else
+                {
+                    WalkAround();
+                }
             }
+            anim.SetFloat("xVelocity", rb.velocity.x);
         }
-        anim.SetFloat("xVelocity", rb.velocity.x);
-    }
 
-    protected override void CollisionCheck()
-    {
-        base.CollisionCheck();
-        playerDetected = Physics2D.OverlapCircle(transform.position, checkRadius, whatIsPlayer);
-        groundBehind = Physics2D.Raycast(groundBehindCheck.position, Vector2.down, distanceGroundCheck, whatIsGround);
-        wallBehind = Physics2D.Raycast(wallCheck.position, Vector2.right * (-facedirection + 1), distanceWallCheck, whatIsGround);
-    }
-
-    private void AttackEvent()
-    {
-        GameObject bullet = Instantiate(bulletprefab, shoot_position.position, shoot_position.rotation);
-        bullet.GetComponent<Bullet_Plant>().SetupSpeed(bulletSpeed * facedirection, 0);
-        ReturnMovement();
-    }
-
-    private void ReturnMovement()
-    {
-        canMove = true;
-    }
-
-    private void MoveBackWards(float multiplier)
-    {
-        if (wallBehind)
-        { return; }
-
-
-        if (!groundBehind)
+        protected override void CollisionCheck()
         {
-            return;
+            base.CollisionCheck();
+            playerDetected = Physics2D.OverlapCircle(transform.position, checkRadius, whatIsPlayer);
+            groundBehind = Physics2D.Raycast(groundBehindCheck.position, Vector2.down, distanceGroundCheck, whatIsGround);
+            wallBehind = Physics2D.Raycast(wallCheck.position, Vector2.right * (-facedirection + 1), distanceWallCheck, whatIsGround);
         }
 
-        rb.velocity = new Vector2(multiplier * speed * -facedirection, rb.velocity.y);
-    }
+        private void AttackEvent()
+        {
+            GameObject bullet = Instantiate(bulletprefab, shoot_position.position, shoot_position.rotation);
+            bullet.GetComponent<Bullet_Plant>().SetupSpeed(bulletSpeed * facedirection, 0);
+            ReturnMovement();
+        }
 
-    protected override void OnDrawGizmos()
-    {
-        base.OnDrawGizmos();
-        Gizmos.DrawLine(groundBehindCheck.position, new Vector2(groundBehindCheck.position.x, groundBehindCheck.position.y - distanceGroundCheck));
-        Gizmos.DrawWireSphere(transform.position, checkRadius);
+        private void ReturnMovement()
+        {
+            canMove = true;
+        }
 
+        private void MoveBackWards(float multiplier)
+        {
+            if (wallBehind)
+            { return; }
+
+
+            if (!groundBehind)
+            {
+                return;
+            }
+
+            rb.velocity = new Vector2(multiplier * speed * -facedirection, rb.velocity.y);
+        }
+
+        protected override void OnDrawGizmos()
+        {
+            base.OnDrawGizmos();
+            Gizmos.DrawLine(groundBehindCheck.position, new Vector2(groundBehindCheck.position.x, groundBehindCheck.position.y - distanceGroundCheck));
+            Gizmos.DrawWireSphere(transform.position, checkRadius);
+
+        }
     }
 }

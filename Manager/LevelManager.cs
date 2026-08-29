@@ -4,82 +4,83 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
-using System.Diagnostics.Contracts;
-using Unity.VisualScripting.Dependencies.NCalc;
 
-public class LevelManager : MonoBehaviour
+namespace AdventureFruit
 {
-    [SerializeField] private GameObject level_button;
-    [SerializeField] private Transform parent_level_button;
-    [SerializeField] private bool[] level_open;
-
-    void Start()
+    public class LevelManager : MonoBehaviour
     {
-        PlayerPrefs.SetInt("Level" + 1 + "Unlocked", 1);
+        [SerializeField] private GameObject level_button;
+        [SerializeField] private Transform parent_level_button;
+        [SerializeField] private bool[] level_open;
 
-        AssignLevelBoolean();
-        for (int i = 1; i < SceneManager.sceneCountInBuildSettings; i++)
+        void Start()
         {
-            if (!level_open[i]) 
-                return;
+            PlayerPrefs.SetInt("Level" + 1 + "Unlocked", 1);
 
-            string level_name = "Level " + i;
-            GameObject new_button = Instantiate(level_button, parent_level_button);
-            new_button.GetComponent<Button>().onClick.AddListener(() => LoadLevel(level_name));
-            new_button.GetComponentInChildren<TextMeshProUGUI>().text = level_name;
-            new_button.GetComponent<LevelButton>().UpdateTextInfo(i);
-        }
-    }
+            AssignLevelBoolean();
+            for (int i = 1; i < SceneManager.sceneCountInBuildSettings; i++)
+            {
+                if (!level_open[i]) 
+                    return;
 
-    private void AssignLevelBoolean()
-    {
-        for (int i = 1; i < SceneManager.sceneCountInBuildSettings; i++)
-        {
-            bool unlocked = PlayerPrefs.GetInt("Level" + i + "Unlocked") == 1;
-            if (unlocked)
-            {
-                level_open[i] = true;
-            }
-            else
-            {
-                return;
+                string level_name = "Level " + i;
+                GameObject new_button = Instantiate(level_button, parent_level_button);
+                new_button.GetComponent<Button>().onClick.AddListener(() => LoadLevel(level_name));
+                new_button.GetComponentInChildren<TextMeshProUGUI>().text = level_name;
+                new_button.GetComponent<LevelButton>().UpdateTextInfo(i);
             }
         }
-    }
 
-    public void LoadLevel(string level_name)
-    {
-        AudioManager.instance.StopBGSound();
-        GameManager.instance.SaveGameDifficulty();
-        SceneManager.LoadScene(level_name);
-    }
-
-    public void LoadNewGame()
-    {
-        for (int i = 2; i < SceneManager.sceneCountInBuildSettings; i++)
+        private void AssignLevelBoolean()
         {
-            bool unlocked = PlayerPrefs.GetInt("Level" + i + "Unlocked") == 1;
-            if (unlocked)
+            for (int i = 1; i < SceneManager.sceneCountInBuildSettings; i++)
             {
-                PlayerPrefs.SetInt("Level" + i + "Unlocked", 0);
-            }
-            else
-            {
-                SceneManager.LoadScene("Level 1");
-                return;
+                bool unlocked = PlayerPrefs.GetInt("Level" + i + "Unlocked") == 1;
+                if (unlocked)
+                {
+                    level_open[i] = true;
+                }
+                else
+                {
+                    return;
+                }
             }
         }
-    }
 
-    public void LoadContinueGame()
-    {
-        for(int i = 2; i< SceneManager.sceneCountInBuildSettings; i++)
+        public void LoadLevel(string level_name)
         {
-            bool unlocked = PlayerPrefs.GetInt("Level" + i + "Unlocked") == 1;
-            if(!unlocked)
+            AudioManager.instance.StopBGSound();
+            GameManager.instance.SaveGameDifficulty();
+            SceneManager.LoadScene(level_name);
+        }
+
+        public void LoadNewGame()
+        {
+            for (int i = 2; i < SceneManager.sceneCountInBuildSettings; i++)
             {
-                SceneManager.LoadScene("Level " + (i - 1));
-                return;
+                bool unlocked = PlayerPrefs.GetInt("Level" + i + "Unlocked") == 1;
+                if (unlocked)
+                {
+                    PlayerPrefs.SetInt("Level" + i + "Unlocked", 0);
+                }
+                else
+                {
+                    SceneManager.LoadScene("Level 1");
+                    return;
+                }
+            }
+        }
+
+        public void LoadContinueGame()
+        {
+            for(int i = 2; i< SceneManager.sceneCountInBuildSettings; i++)
+            {
+                bool unlocked = PlayerPrefs.GetInt("Level" + i + "Unlocked") == 1;
+                if(!unlocked)
+                {
+                    SceneManager.LoadScene("Level " + (i - 1));
+                    return;
+                }
             }
         }
     }

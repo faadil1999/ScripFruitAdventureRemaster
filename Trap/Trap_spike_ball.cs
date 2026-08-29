@@ -2,38 +2,41 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Trap_spike_ball : HitZoneable
+namespace AdventureFruit
 {
-    // Start is called before the first frame update
-    private Rigidbody2D rb;
-    [SerializeField] private Vector2 pushDirection ;
-    [SerializeField] private Vector2 pushDirectionDuringGame ;
-    [SerializeField] private float pauseTime ;
-    private float pauseTimeCounter ;
-    void Start()
+    public class Trap_spike_ball : HitZoneable
     {
-        rb = GetComponent<Rigidbody2D>();
-        rb.AddForce(pushDirection, ForceMode2D.Impulse);
-        pauseTimeCounter = pauseTime;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        pauseTimeCounter -= Time.deltaTime;
-        if(pauseTimeCounter < .1f)
+        // Start is called before the first frame update
+        private Rigidbody2D rb;
+        [SerializeField] private Vector2 pushDirection ;
+        [SerializeField] private Vector2 pushDirectionDuringGame ;
+        [SerializeField] private float pauseTime ;
+        private float pauseTimeCounter ;
+        void Start()
         {
-            int direction = 1;
-            if(rb.velocity.x < 0) 
-            {
-                direction = -1;
-            }
-            else
-            {
-                direction = 1;
-            }
-                rb.AddForce(direction * pushDirectionDuringGame, ForceMode2D.Impulse);
+            rb = GetComponent<Rigidbody2D>();
+            rb.AddForce(pushDirection, ForceMode2D.Impulse);
             pauseTimeCounter = pauseTime;
-        }   
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+            pauseTimeCounter -= Time.deltaTime;
+            if(pauseTimeCounter < .1f)
+            {
+                int direction = 1;
+                if(rb.velocity.x < 0) 
+                {
+                    direction = -1;
+                }
+                else
+                {
+                    direction = 1;
+                }
+                    rb.AddForce(direction * pushDirectionDuringGame, ForceMode2D.Impulse);
+                pauseTimeCounter = pauseTime;
+            }   
+        }
     }
 }

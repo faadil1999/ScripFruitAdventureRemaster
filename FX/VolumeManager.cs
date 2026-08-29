@@ -4,27 +4,30 @@ using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
 
-public class VolumeManager : MonoBehaviour
+namespace AdventureFruit
 {
-    [SerializeField] private string mixerParametr;
-    [SerializeField] private AudioMixer audioMixer;
-    [SerializeField] private Slider slider;
-    [SerializeField] private float sliderMultiplier;
-
-    public void SetupVolume()
+    public class VolumeManager : MonoBehaviour
     {
-        slider.onValueChanged.AddListener(SliderValue);
-        slider.minValue = .001f;
-        slider.value = PlayerPrefs.GetFloat(mixerParametr, slider.value);
-    }
+        [SerializeField] private string mixerParametr;
+        [SerializeField] private AudioMixer audioMixer;
+        [SerializeField] private Slider slider;
+        [SerializeField] private float sliderMultiplier;
 
-    private void OnDisable()
-    {
-        PlayerPrefs.SetFloat(mixerParametr, slider.value);
-    }
+        public void SetupVolume()
+        {
+            slider.onValueChanged.AddListener(SliderValue);
+            slider.minValue = .001f;
+            slider.value = PlayerPrefs.GetFloat(mixerParametr, slider.value);
+        }
 
-    private void SliderValue(float value)
-    {
-        audioMixer.SetFloat(mixerParametr, Mathf.Log10(value) * sliderMultiplier );
+        private void OnDisable()
+        {
+            PlayerPrefs.SetFloat(mixerParametr, slider.value);
+        }
+
+        private void SliderValue(float value)
+        {
+            audioMixer.SetFloat(mixerParametr, Mathf.Log10(value) * sliderMultiplier );
+        }
     }
 }

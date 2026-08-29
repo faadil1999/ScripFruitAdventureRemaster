@@ -2,21 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Mushroom_enemy : Enemy
+namespace AdventureFruit
 {
-    protected override void Start()
+    public class Mushroom_enemy : Enemy
     {
-        base.Start();
+        protected override void Start()
+        {
+            base.Start();
+        }
+        private void Update()
+        {
+            idleTimeCounter -= Time.deltaTime;
+            WalkAround();
+
+            CollisionCheck();
+
+            AnimationController();
+        }
+
+
     }
-    private void Update()
-    {
-        idleTimeCounter -= Time.deltaTime;
-        WalkAround();
-
-        CollisionCheck();
-
-        AnimationController();
-    }
-
-   
 }

@@ -2,35 +2,38 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EndPoint : MonoBehaviour
+namespace AdventureFruit
 {
-    private AllCounter allCounter;
-    // Start is called before the first frame update
-    void Start()
+    public class EndPoint : MonoBehaviour
     {
-        allCounter = GameObject.Find("CanvasInGameUI").GetComponent<AllCounter>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if(collision.GetComponent<Player>() != null)
+        private AllCounter allCounter;
+        // Start is called before the first frame update
+        void Start()
         {
-            if (GameManager.instance.start_timer)
+            allCounter = GameObject.Find("CanvasInGameUI").GetComponent<AllCounter>();
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+
+        }
+
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            if(collision.GetComponent<Player>() != null)
             {
-                GameManager.instance.start_timer = false;
+                if (GameManager.instance.start_timer)
+                {
+                    GameManager.instance.start_timer = false;
+                }
+                GetComponent<Animator>().SetTrigger("touched");
+                Destroy(collision.gameObject);
+                GameManager.instance.SaveBestTime();
+                GameManager.instance.SaveTotalFruitCollected();
+                GameManager.instance.SaveLevelInfo();
+                allCounter.OnEndLevel();
             }
-            GetComponent<Animator>().SetTrigger("touched");
-            Destroy(collision.gameObject);
-            GameManager.instance.SaveBestTime();
-            GameManager.instance.SaveTotalFruitCollected();
-            GameManager.instance.SaveLevelInfo();
-            allCounter.OnEndLevel();
         }
     }
 }

@@ -2,14 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HitZoneable : MonoBehaviour
+namespace AdventureFruit
 {
-    protected virtual void OnTriggerEnter2D(Collider2D collision)
+    public class HitZoneable : MonoBehaviour
     {
-        if (collision.GetComponent<Player>() != null)
+        protected virtual void OnTriggerEnter2D(Collider2D collision)
         {
-            Player player = collision.GetComponent<Player>();
-            player.Knockback(transform);
+            if (collision.GetComponent<Player>() != null)
+            {
+                Player player = collision.GetComponent<Player>();
+                player.Knockback(transform);
+            }
         }
     }
 }

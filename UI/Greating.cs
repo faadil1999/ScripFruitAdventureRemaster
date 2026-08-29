@@ -3,36 +3,39 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Greating : MonoBehaviour
+namespace AdventureFruit
 {
-    private ScrollRect scrollRect;
-
-    // Start is called before the first frame update
-    void Start()
+    public class Greating : MonoBehaviour
     {
-        scrollRect = GetComponent<ScrollRect>();
-    }
+        private ScrollRect scrollRect;
 
-    // Update is called once per frame
-    void Update()
-    {
-        Scroll();
-    }
-
-    /**
-    * Scrolls the scrollview.
-    * Note that positive value scrolls down, negative value scrolls up.
-    */
-    public void Scroll(float value = .003f)
-    {
-        if(scrollRect.verticalNormalizedPosition > .0f)
+        // Start is called before the first frame update
+        void Start()
         {
-            scrollRect.verticalNormalizedPosition -= value;
+            scrollRect = GetComponent<ScrollRect>();
         }
-        else
+
+        // Update is called once per frame
+        void Update()
         {
-            scrollRect.verticalNormalizedPosition = .0f;
+            Scroll();
         }
-        Debug.Log(scrollRect.verticalNormalizedPosition);
+
+        /**
+        * Scrolls the scrollview.
+        * Note that positive value scrolls down, negative value scrolls up.
+        */
+        public void Scroll(float value = .003f)
+        {
+            if(scrollRect.verticalNormalizedPosition > .0f)
+            {
+                scrollRect.verticalNormalizedPosition -= value;
+            }
+            else
+            {
+                scrollRect.verticalNormalizedPosition = .0f;
+            }
+            Debug.Log(scrollRect.verticalNormalizedPosition);
+        }
     }
 }

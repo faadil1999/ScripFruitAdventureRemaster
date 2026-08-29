@@ -2,82 +2,85 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+namespace AdventureFruit
 {
-    public static GameManager instance;
-    public int game_difficulty;
-
-    [Header("Timer info")]
-    public bool start_timer;
-    public float timer;
-
-    [Header("Level info")]
-    public int levelNumber;
-
-    private void Awake()
+    public class GameManager : MonoBehaviour
     {
-        DontDestroyOnLoad(this.gameObject);
-        if (instance == null)
-            instance = this;
-        else
-            Destroy(this.gameObject);
+        public static GameManager instance;
+        public int game_difficulty;
 
-    }
+        [Header("Timer info")]
+        public bool start_timer;
+        public float timer;
 
-    private void Start()
-    {
-        if(game_difficulty == 0)
+        [Header("Level info")]
+        public int levelNumber;
+
+        private void Awake()
         {
-           game_difficulty = PlayerPrefs.GetInt("GameDifficulty");
-        }
-    }
+            DontDestroyOnLoad(this.gameObject);
+            if (instance == null)
+                instance = this;
+            else
+                Destroy(this.gameObject);
 
-    private void Update()
-    {
-        if(start_timer)
+        }
+
+        private void Start()
         {
-            timer += Time.deltaTime;
+            if(game_difficulty == 0)
+            {
+               game_difficulty = PlayerPrefs.GetInt("GameDifficulty");
+            }
         }
-    }
 
-    //function for saving a difficulty of the game
-    public void SaveGameDifficulty()
-    {
-        PlayerPrefs.SetInt("GameDifficulty", game_difficulty);
-    }
-
-    //function for saving the best time
-    public void SaveBestTime()
-    {
-        float last_time = PlayerPrefs.GetFloat("Level" + levelNumber + "Best time", 999);
-
-        if(timer < last_time)
+        private void Update()
         {
-            PlayerPrefs.SetFloat("Level"+ levelNumber + "Best time", timer);
+            if(start_timer)
+            {
+                timer += Time.deltaTime;
+            }
         }
-    }
 
-    public void SaveTotalFruitCollected()
-    {
-        int total_fruit = PlayerPrefs.GetInt("TotalFruitCollected");
+        //function for saving a difficulty of the game
+        public void SaveGameDifficulty()
+        {
+            PlayerPrefs.SetInt("GameDifficulty", game_difficulty);
+        }
 
-        int newTotalFruit = total_fruit + PlayerManager.instance.fruits;
+        //function for saving the best time
+        public void SaveBestTime()
+        {
+            float last_time = PlayerPrefs.GetFloat("Level" + levelNumber + "Best time", 999);
 
-        PlayerPrefs.SetInt("TotalFruitCollected", newTotalFruit);
+            if(timer < last_time)
+            {
+                PlayerPrefs.SetFloat("Level"+ levelNumber + "Best time", timer);
+            }
+        }
 
-        //for saving amount of fruits collected at the specific level 
-        PlayerPrefs.SetInt("Level" + levelNumber + "FruitCollected", PlayerManager.instance.fruits);
-        PlayerManager.instance.fruits = 0;
-    }
+        public void SaveTotalFruitCollected()
+        {
+            int total_fruit = PlayerPrefs.GetInt("TotalFruitCollected");
 
-    public void SaveLevelInfo()
-    {
-        int nextLevelNumber =levelNumber + 1;
-        PlayerPrefs.SetInt("Level" + nextLevelNumber + "Unlocked", 1);
-    }
+            int newTotalFruit = total_fruit + PlayerManager.instance.fruits;
 
-    public void SaveCharacterId()
-    {
+            PlayerPrefs.SetInt("TotalFruitCollected", newTotalFruit);
 
+            //for saving amount of fruits collected at the specific level 
+            PlayerPrefs.SetInt("Level" + levelNumber + "FruitCollected", PlayerManager.instance.fruits);
+            PlayerManager.instance.fruits = 0;
+        }
+
+        public void SaveLevelInfo()
+        {
+            int nextLevelNumber =levelNumber + 1;
+            PlayerPrefs.SetInt("Level" + nextLevelNumber + "Unlocked", 1);
+        }
+
+        public void SaveCharacterId()
+        {
+
+        }
     }
 }

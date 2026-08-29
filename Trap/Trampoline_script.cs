@@ -2,17 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Trampoline_script : MonoBehaviour
+namespace AdventureFruit
 {
-    [SerializeField] private float pushForce;
-
-    private void OnTriggerEnter2D(Collider2D collision)
+    public class Trampoline_script : MonoBehaviour
     {
-        if(collision.GetComponent<Player>() != null)
+        [SerializeField] private float pushForce;
+
+        private void OnTriggerEnter2D(Collider2D collision)
         {
-            GetComponent<Animator>().SetTrigger("pushed");
-            AudioManager.instance.PlaySFX(15);
-            collision.GetComponent<Player>().PushPlayer(pushForce);
+            if(collision.GetComponent<Player>() != null)
+            {
+                GetComponent<Animator>().SetTrigger("pushed");
+                AudioManager.instance.PlaySFX(SoundId.Trampoline);
+                collision.GetComponent<Player>().PushPlayer(pushForce);
+            }
         }
     }
 }

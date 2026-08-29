@@ -3,21 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SplashIntro : MonoBehaviour
+namespace AdventureFruit
 {
-    [SerializeField] private float waitTime = 3f;
-
-    // Start is called before the first frame update
-    void Start()
+    public class SplashIntro : MonoBehaviour
     {
-        StartCoroutine(TimeBeforSplash());
-        
-    }
+        [SerializeField] private float waitTime = 3f;
 
-    IEnumerator TimeBeforSplash()
-    {
-        yield return new WaitForSeconds(waitTime);
-        SceneManager.LoadScene(1);
-    }
+        // Start is called before the first frame update
+        void Start()
+        {
+            StartCoroutine(TimeBeforSplash());
 
+        }
+
+        IEnumerator TimeBeforSplash()
+        {
+            yield return new WaitForSeconds(waitTime);
+            SceneManager.LoadScene(1);
+        }
+
+    }
 }

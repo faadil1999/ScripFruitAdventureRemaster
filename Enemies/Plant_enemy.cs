@@ -2,43 +2,46 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Plant_enemy : Enemy
+namespace AdventureFruit
 {
-    [SerializeField] private GameObject bulletprefab;
-    [SerializeField] private Transform shoot_position;
-    [SerializeField] private bool facingRight;
-
-    // Start is called before the first frame update
-    protected override void Start()
+    public class Plant_enemy : Enemy
     {
-        base.Start();
-        if( facingRight )
+        [SerializeField] private GameObject bulletprefab;
+        [SerializeField] private Transform shoot_position;
+        [SerializeField] private bool facingRight;
+
+        // Start is called before the first frame update
+        protected override void Start()
         {
-            Flip();
-        }
-    }
-
-
-    // Update is called once per frame
-    void Update()
-    {
-        CollisionCheck();
-        idleTimeCounter -= Time.deltaTime;
-        bool playerDetected = playerDetection.collider?.GetComponent<Player>() != null;
-
-        if (idleTimeCounter < 0 && playerDetected)
-        {
-            idleTimeCounter = idleTime;
-            anim.SetTrigger("attack");
+            base.Start();
+            if( facingRight )
+            {
+                Flip();
+            }
         }
 
+
+        // Update is called once per frame
+        void Update()
+        {
+            CollisionCheck();
+            idleTimeCounter -= Time.deltaTime;
+            bool playerDetected = playerDetection.collider?.GetComponent<Player>() != null;
+
+            if (idleTimeCounter < 0 && playerDetected)
+            {
+                idleTimeCounter = idleTime;
+                anim.SetTrigger("attack");
+            }
+
+        }
+
+        private void AttackEvent()
+        {
+            GameObject bullet = Instantiate(bulletprefab, shoot_position.transform.position, shoot_position.transform.rotation);
+
+            bullet.GetComponent<Bullet_Plant>().SetupSpeed(speed * facedirection, 0);
+        }
+
     }
-
-    private void AttackEvent()
-    {
-        GameObject bullet = Instantiate(bulletprefab, shoot_position.transform.position, shoot_position.transform.rotation);
-
-        bullet.GetComponent<Bullet_Plant>().SetupSpeed(speed * facedirection, 0);
-    }
-
 }
