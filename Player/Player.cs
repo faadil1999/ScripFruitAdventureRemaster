@@ -21,6 +21,8 @@ namespace AdventureFruit
         [SerializeField] private float jumpForce;
         public Rigidbody2D rb;
         public Vector2 wallJumpDirection;
+        [Tooltip("Downward speed while wall sliding and holding down")]
+        public float wallSlideFastSpeed = 4f;
         private bool canBeControlled = false;
         private float playerGravityScale;
         private bool readyToLand;

@@ -25,7 +25,15 @@ namespace AdventureFruit
         public override void Update()
         {
             base.Update();
-            rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.1f);
+            if (yInput < 0)
+            {
+                // Holding down: slide faster
+                rb.velocity = new Vector2(rb.velocity.x, -player.wallSlideFastSpeed);
+            }
+            else
+            {
+                rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.1f);
+            }
             if (player.IsGroundDetected())
             {
                 player.stateMachine.ChangeState(player.idleState);

@@ -32,6 +32,14 @@ namespace AdventureFruit
                 player.stateMachine.ChangeState(player.airState);
             }
 
+            if (player.canDoubleJump)
+            {
+                if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow))
+                {
+                    player.stateMachine.ChangeState(player.secondJumpState);
+                }
+            }
+
         }
     }
 }
