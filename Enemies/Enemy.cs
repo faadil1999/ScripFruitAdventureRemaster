@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using AdventureFruit.Core.StateMachine;
 using UnityEngine;
 
 namespace AdventureFruit
@@ -13,7 +14,7 @@ namespace AdventureFruit
         protected float idleTimeCounter;
         protected bool isAggresive;
 
-        protected Animator anim;
+        public Animator anim;
                          protected Rigidbody2D rb;
         [SerializeField] protected LayerMask whatIsGround;
         [SerializeField] protected float distanceGroundCheck;
@@ -37,6 +38,16 @@ namespace AdventureFruit
         protected Transform player;
 
         protected bool canMove = true;
+
+        #region StateMachine
+        public StateMachine stateMachine;
+        
+        #endregion
+
+        protected virtual void Awake()
+        {
+           
+        }
         protected virtual void Start()
         {
             if(PlayerManager.instance?.currentPlayer == null )

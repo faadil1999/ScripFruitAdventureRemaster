@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using AdventureFruit.Core.StateMachine;
 
 namespace AdventureFruit
 {
@@ -12,13 +13,13 @@ namespace AdventureFruit
 
         public bool pcTesting = false;
 
-        private float hInput;
-        private float vInput;
+        private float xInput;
+        private float yInput;
 
         [Header("Move info")]
         [SerializeField] private float moveSpeed;
         [SerializeField] private float jumpForce;
-        private Rigidbody2D rb;
+        public Rigidbody2D rb;
         public Vector2 wallJumpDirection;
         private bool canBeControlled = false;
         private float playerGravityScale;
@@ -36,9 +37,9 @@ namespace AdventureFruit
         [SerializeField] private LayerMask whatIsWall;
         [SerializeField] private float groundCheckDistance;
                          private bool isGrounded;
-                         private bool canDoubleJump = true;
-                         private Animator anim;
-                         private bool canMove;
+        public bool canDoubleJump = true;
+                         public Animator anim;
+                         public bool canMove;
 
         //enemy detection stuffs
         [SerializeField] private Transform enemyCheckcenter;
@@ -81,6 +82,29 @@ namespace AdventureFruit
         [SerializeField] private float dashSpeed;
         public float distanceBetweenImage;
         private float lastImageXpos;
+
+        #region StateMachine
+        public StateMachine stateMachine;
+        public PlayerIdleState idleState;
+        public PlayerMoveState moveState;
+        public PlayerJumpState jumpState;
+        public PlayerSecondJumpState secondJumpState;
+        public PlayerDashState dashState;
+        public PlayerAirState airState;
+        public PlayerSlidingState slidingState;
+        #endregion
+
+        private void Awake()
+        {
+            stateMachine = new StateMachine();
+            idleState = new PlayerIdleState(this, stateMachine, "Idle");
+            moveState = new PlayerMoveState(this, stateMachine, "Move");
+            jumpState = new PlayerJumpState(this, stateMachine, "Jump");
+            secondJumpState = new PlayerSecondJumpState(this, stateMachine, "Jump");
+            dashState = new PlayerDashState(this, stateMachine, "dash");
+            airState = new PlayerAirState(this, stateMachine, "Jump");
+            slidingState = new PlayerSlidingState(this, stateMachine, "WallSliding");
+        }
         void Start()
         {
             rb = GetComponent<Rigidbody2D>();
@@ -89,20 +113,22 @@ namespace AdventureFruit
             ChangePlayerSkin();
             playerGravityScale = rb.gravityScale;
             rb.gravityScale = 0;
+            stateMachine.Initialize(airState); 
 
         }
 
         // Update is called once per frame
         void Update()
         {
-            AnimationControllers();
-            if (isKnocked)
-                return;
-            FlipController();
+            /* AnimationControllers();
+             if (isKnocked)
+                 return;
+             FlipController();
+             ;*/
             CollisionCheck();
-            InputChecks();
-            dashCounterTime -= Time.deltaTime;
-
+            stateMachine.currentState.Update();
+            //InputChecks();
+           /* dashCounterTime -= Time.deltaTime;
             //enemy damage
             EnemyDamage();
 
@@ -111,9 +137,10 @@ namespace AdventureFruit
 
             if (isGrounded)
             {
-
                 canDoubleJump = true;
                 canMove = true;
+                Debug.Log(canMove);
+
                 if (bufferJumpCounter > 0)
                 {
                     bufferJumpCounter = -1;
@@ -141,13 +168,14 @@ namespace AdventureFruit
                 }
             }
 
+           //DONE
             if (canWallSlide)
             {
                 isWallSliding = true;
                 rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.1f);
             }
 
-            Move();
+            Move();*/
         }
 
         public void IncrementFruits()
@@ -177,6 +205,7 @@ namespace AdventureFruit
                         }
                         else
                         {
+                        // Statemachine useful here
                             AudioManager.instance.PlaySFX(SoundId.EnemyStomped);
                             enemy.GetComponent<Enemy>().Damage();
                             Jump();
@@ -192,11 +221,11 @@ namespace AdventureFruit
         private void AnimationControllers()
         {
             anim.SetBool("isKnocked", isKnocked);
-            anim.SetBool("isGrounded", isGrounded);
+            anim.SetBool("isGrounded", this.IsGroundDetected());
             anim.SetFloat("yVelocity",rb.velocity.y);
             anim.SetBool("canBeControlled", canBeControlled);
             anim.SetBool("isMoving", ((int)rb.velocity.x) != 0);
-            anim.SetBool("isWallSliding",isWallSliding);
+            anim.SetBool("WallSliding", isWallSliding);
             anim.SetBool("isWallDetected", isWallDetected);
         }
 
@@ -221,16 +250,16 @@ namespace AdventureFruit
             }
             if(pcTesting)
             {
-                hInput = Input.GetAxisRaw("Horizontal");
-                vInput = Input.GetAxisRaw("Vertical");
+                xInput = Input.GetAxisRaw("Horizontal");
+                yInput = Input.GetAxisRaw("Vertical");
             }
             else
             {
-                hInput = joystick.Horizontal;
-                vInput = joystick.Vertical;
+                xInput = joystick.Horizontal;
+                yInput = joystick.Vertical;
             }
 
-            if(vInput < 0)
+            if(yInput < 0)
             {
                 canWallSlide = false;
             }
@@ -268,7 +297,6 @@ namespace AdventureFruit
 
         public void JumpButton()
         {
-
             if(!isGrounded)
             {
                 bufferJumpCounter = bufferJumpTime; 
@@ -330,7 +358,7 @@ namespace AdventureFruit
             {
                 if (dashCounterTime > 0)
                 {
-                    rb.velocity = new Vector2(dashSpeed * hInput, 0);
+                    rb.velocity = new Vector2(dashSpeed * xInput, 0);
                     lastImageXpos = transform.position.x;
                     if(Mathf.Abs(transform.position.x - lastImageXpos) > distanceBetweenImage)
                     {
@@ -341,7 +369,7 @@ namespace AdventureFruit
                 }
                 else
                 {
-                    rb.velocity = new Vector2(moveSpeed * hInput, rb.velocity.y);
+                    rb.velocity = new Vector2(moveSpeed * xInput, rb.velocity.y);
                     //GetAxisRaw for having an instant stoping GetAxis for having slowly stopping movement
                 }
             }
@@ -362,7 +390,7 @@ namespace AdventureFruit
             }
         }
 
-        private void Jump()
+        public void Jump()
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
             if (isGrounded)
@@ -376,7 +404,7 @@ namespace AdventureFruit
         {
             rb.velocity = new Vector2(rb.velocity.x, pushForce);
         }
-        private void SecondJump()
+        public void SecondJump()
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce * .8f);
         }
@@ -434,6 +462,59 @@ namespace AdventureFruit
         {
             canMove = !canMove;
         }
+
+        #region Velocity
+        public void ZeroVelocity()
+        {
+            if (isKnocked)
+            {
+                return;
+            }
+            rb.velocity = new Vector2(0, 0);
+        }
+        public void SetVelocity(float _xVelocity, float _yVelocity)
+        {
+            if (isKnocked)
+            {
+                return;
+            }
+
+            rb.velocity = new Vector2(_xVelocity * moveSpeed, _yVelocity);
+            Debug.Log(rb.velocity);
+            FlipController(_xVelocity);
+        }
+
+        #endregion
+
+        #region ToGamePersona
+        public virtual void FlipController(float xInput)
+        {
+            if (xInput < 0 && facingDirection > 0)
+                Flip();
+
+            if (xInput > 0 && facingDirection < 0)
+                Flip();
+        }
+        public bool IsWallDetected() => this.isWallDetected = Physics2D.Raycast(transform.position, Vector2.right * facingDirection, wallCheckDistance, whatIsWall);
+
+        public bool IsGroundDetected() => this.isGrounded = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, whatIsGround);
+
+        //<summary> For setting isGrounded value </summary>
+        public void SetIsGrounded(bool _isGrounded)
+        {
+            this.isGrounded = _isGrounded;
+        }
+
+        public float GetMoveSpeed()
+        {
+            return this.moveSpeed;
+        }
+
+        public void SetCanMove(bool _canMove)
+        {
+            this.canMove = _canMove;
+        }
+        #endregion
 
     }
 }

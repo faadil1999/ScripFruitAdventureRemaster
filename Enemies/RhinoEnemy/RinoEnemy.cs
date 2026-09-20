@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace AdventureFruit
 {
-    public class Rino_enemy : Enemy
+    public class RinoEnemy : Enemy
     {
         // Start is called before the first frame update
         [SerializeField] private float chargeSpeed;

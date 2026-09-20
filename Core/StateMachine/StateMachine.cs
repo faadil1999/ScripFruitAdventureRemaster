@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 
 namespace AdventureFruit.Core.StateMachine
 {
@@ -9,25 +10,30 @@ namespace AdventureFruit.Core.StateMachine
     /// </summary>
     public sealed class StateMachine
     {
-        public IState Current { get; private set; }
+        public State currentState { get; private set; }
 
         /// <summary>Raised after a state change, with (previous, next). Previous is null on the first change.</summary>
-        public event Action<IState, IState> Changed;
+        public event Action<State, State> Changed;
+        public void Initialize(State startingState)
+        {
+            currentState = startingState;
+            currentState.Enter();
+        }
 
-        public void ChangeState(IState next)
+        public void ChangeState(State next)
         {
             if (next == null) throw new ArgumentNullException(nameof(next));
-            if (ReferenceEquals(next, Current)) return;
-
-            IState previous = Current;
+            if (ReferenceEquals(next, currentState)) return;
+            Debug.WriteLine($"StateMachine: {currentState?.GetType().Name} -> {next.GetType().Name}");
+            State previous = currentState;
             previous?.Exit();
-            Current = next;
+            currentState = next;
             next.Enter();
             Changed?.Invoke(previous, next);
         }
 
-        public void Tick(float deltaTime) => Current?.Tick(deltaTime);
+        //public void Tick(float deltaTime) => currentState?.Tick(deltaTime);
 
-        public void FixedTick(float fixedDeltaTime) => Current?.FixedTick(fixedDeltaTime);
+       // public void FixedTick(float fixedDeltaTime) => currentState?.FixedTick(fixedDeltaTime);
     }
 }
