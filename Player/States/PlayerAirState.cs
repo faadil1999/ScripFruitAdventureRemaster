@@ -24,6 +24,14 @@ namespace AdventureFruit
         public override void Update()
         {
             base.Update();
+
+            // Air control: steer while pressing left/right, keep momentum otherwise.
+            // Done first so a state change below (e.g. landing -> Idle) has the final word.
+            if (xInput != 0)
+            {
+                player.SetVelocity(xInput, rb.velocity.y);
+            }
+
             if (player.canDoubleJump)
             {
                 if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow))
@@ -39,11 +47,6 @@ namespace AdventureFruit
             {
                 player.stateMachine.ChangeState(player.slidingState);
             }
-           /* if(xInput!=0)
-            {
-                player.FlipController(xInput);
-                rb.velocity = new Vector2(xInput * player.GetMoveSpeed(), rb.velocity.y);
-            }*/
         }
     }
 }
