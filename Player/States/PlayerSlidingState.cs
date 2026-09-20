@@ -29,13 +29,13 @@ namespace AdventureFruit
             if (player.IsGroundDetected())
             {
                 player.stateMachine.ChangeState(player.idleState);
+                return;
             }
-            if (player.canDoubleJump)
+            if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow))
             {
-                if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow))
-                {
-                    player.stateMachine.ChangeState(player.jumpState);
-                }
+                // Wall jump: direction follows xInput
+                player.wallJumpState.Setup(xInput);
+                player.stateMachine.ChangeState(player.wallJumpState);
             }
         }
     }

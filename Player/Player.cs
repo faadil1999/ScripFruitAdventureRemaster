@@ -92,6 +92,7 @@ namespace AdventureFruit
         public PlayerDashState dashState;
         public PlayerAirState airState;
         public PlayerSlidingState slidingState;
+        public PlayerWallJumpState wallJumpState;
         #endregion
 
         private void Awake()
@@ -104,6 +105,7 @@ namespace AdventureFruit
             dashState = new PlayerDashState(this, stateMachine, "dash");
             airState = new PlayerAirState(this, stateMachine, "Jump");
             slidingState = new PlayerSlidingState(this, stateMachine, "WallSliding");
+            wallJumpState = new PlayerWallJumpState(this, stateMachine, "Jump");
         }
         void Start()
         {
