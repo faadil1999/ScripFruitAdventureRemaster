@@ -36,8 +36,8 @@ namespace AdventureFruit
 
             if (activeTimeCounter > 0)
             {
-                //MoveTowards(from position, to position, speed movement)
-                transform.position = Vector2.MoveTowards(transform.position, player.position, speed * Time.deltaTime);
+                //MoveTowards(from position, to position, moveSpeed movement)
+                transform.position = Vector2.MoveTowards(transform.position, player.position, moveSpeed * Time.deltaTime);
             }
 
             //Algo for vanishing and appearing ghost START
@@ -65,11 +65,11 @@ namespace AdventureFruit
             if (player == null)
                 return;
 
-            if (facedirection == -1 && transform.position.x < player.position.x)
+            if (facingDirection == -1 && transform.position.x < player.position.x)
             {
                 Flip();
             }
-            else if (facedirection == 1 && transform.position.x > player.position.x)
+            else if (facingDirection == 1 && transform.position.x > player.position.x)
             {
                 Flip();
             }

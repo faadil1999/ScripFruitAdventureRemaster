@@ -23,7 +23,7 @@ namespace AdventureFruit
         // flying event for flying effect
         private void FlyEvent()
         {
-            rb.velocity = new Vector2(speed * facedirection, fly_force);
+            rb.velocity = new Vector2(moveSpeed * facingDirection, fly_force);
         }
 
         // Update is called once per frame
@@ -31,7 +31,7 @@ namespace AdventureFruit
         {
             CollisionCheck();
 
-            if(groundDetected)
+            if(isGrounded)
             {
                 fly_force = fly_force_up;
             }
@@ -40,7 +40,7 @@ namespace AdventureFruit
                 fly_force = fly_force_down;
             }
 
-            if(isWall)
+            if(isWallDetected)
             {
                 Flip();
             }

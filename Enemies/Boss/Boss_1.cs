@@ -100,7 +100,7 @@ namespace AdventureFruit
                 isFlying = false;
             }
 
-            if (groundDetected)
+            if (isGrounded)
             {
                 StopAllFX();
             }
@@ -123,7 +123,7 @@ namespace AdventureFruit
             FlipController();
             CollisionCheck();
             AnimationController();
-            if (isFalling && groundDetected)
+            if (isFalling && isGrounded)
             {
                 groundedEffect();
                 isFalling = false;
@@ -165,7 +165,7 @@ namespace AdventureFruit
             AudioManager.instance.PlaySFX(SoundId.BossFly);
             wingsDustFx.Play();
             fireFx.Stop();
-            rb.velocity = new Vector2(speed * facedirection, flyForce);
+            rb.velocity = new Vector2(moveSpeed * facingDirection, flyForce);
         }
 
         public void FireEffectEvent()
@@ -199,15 +199,15 @@ namespace AdventureFruit
             if (player == null)
                 return;
 
-            if (player.transform.position.x > transform.position.x && facedirection == -1)
+            if (player.transform.position.x > transform.position.x && facingDirection == -1)
             {
                 Flip();
-                facedirection = 1;
+                facingDirection = 1;
             }
-            else if (player.transform.position.x < transform.position.x && facedirection == 1)
+            else if (player.transform.position.x < transform.position.x && facingDirection == 1)
             {
                 Flip();
-                facedirection = -1;
+                facingDirection = -1;
             }
         }
 

@@ -28,7 +28,7 @@ namespace AdventureFruit
         protected override void Start()
         {
             base.Start();
-            defaultSpeed = speed;
+            defaultSpeed = moveSpeed;
             destination = idlePoints[0].position;
             isAggresive = false;
         }
@@ -54,14 +54,14 @@ namespace AdventureFruit
             if (playerDetected && !isAggresive)
             {
                 isAggresive = true;
-                speed *= 1.5f;
+                moveSpeed *= 1.5f;
             }
 
             if (!isAggresive)
             {
 
                 destination = idlePoints[indexIdlePoint].position;
-                transform.position = Vector2.MoveTowards(transform.position, destination, speed * Time.deltaTime);
+                transform.position = Vector2.MoveTowards(transform.position, destination, moveSpeed * Time.deltaTime);
 
                 if(Vector2.Distance(transform.position, idlePoints[indexIdlePoint].position) < .1f)
                 {
@@ -75,7 +75,7 @@ namespace AdventureFruit
             else
             {
                 Vector2 newPosition = new Vector2(player.transform.position.x, player.transform.position.y + yOffset);
-                transform.position = Vector2.MoveTowards(transform.position, newPosition, speed * Time.deltaTime);
+                transform.position = Vector2.MoveTowards(transform.position, newPosition, moveSpeed * Time.deltaTime);
 
                 float xDifference = transform.position.x - player.position.x;
 
@@ -92,7 +92,7 @@ namespace AdventureFruit
             GameObject bullet = Instantiate(bulletprefab, shoot_position.transform.position, shoot_position.transform.rotation);
 
             bullet.GetComponent<Bullet_Plant>().SetupSpeed(0, -bulletSpeed);
-            speed = defaultSpeed;
+            moveSpeed = defaultSpeed;
             idleTimeCounter = idleTime;
             anim.ResetTrigger("attack");
             isAggresive = false;

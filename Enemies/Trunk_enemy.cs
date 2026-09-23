@@ -82,14 +82,14 @@ namespace AdventureFruit
         {
             base.CollisionCheck();
             playerDetected = Physics2D.OverlapCircle(transform.position, checkRadius, whatIsPlayer);
-            groundBehind = Physics2D.Raycast(groundBehindCheck.position, Vector2.down, distanceGroundCheck, whatIsGround);
-            wallBehind = Physics2D.Raycast(wallCheck.position, Vector2.right * (-facedirection + 1), distanceWallCheck, whatIsGround);
+            groundBehind = Physics2D.Raycast(groundBehindCheck.position, Vector2.down, groundCheckDistance, whatIsGround);
+            wallBehind = Physics2D.Raycast(wallCheck.position, Vector2.right * (-facingDirection + 1), distanceWallCheck, whatIsGround);
         }
 
         private void AttackEvent()
         {
             GameObject bullet = Instantiate(bulletprefab, shoot_position.position, shoot_position.rotation);
-            bullet.GetComponent<Bullet_Plant>().SetupSpeed(bulletSpeed * facedirection, 0);
+            bullet.GetComponent<Bullet_Plant>().SetupSpeed(bulletSpeed * facingDirection, 0);
             ReturnMovement();
         }
 
@@ -109,13 +109,13 @@ namespace AdventureFruit
                 return;
             }
 
-            rb.velocity = new Vector2(multiplier * speed * -facedirection, rb.velocity.y);
+            rb.velocity = new Vector2(multiplier * moveSpeed * -facingDirection, rb.velocity.y);
         }
 
         protected override void OnDrawGizmos()
         {
             base.OnDrawGizmos();
-            Gizmos.DrawLine(groundBehindCheck.position, new Vector2(groundBehindCheck.position.x, groundBehindCheck.position.y - distanceGroundCheck));
+            Gizmos.DrawLine(groundBehindCheck.position, new Vector2(groundBehindCheck.position.x, groundBehindCheck.position.y - groundCheckDistance));
             Gizmos.DrawWireSphere(transform.position, checkRadius);
 
         }

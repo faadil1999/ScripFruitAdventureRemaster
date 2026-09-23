@@ -21,7 +21,7 @@ namespace AdventureFruit
         protected override void Start()
         {
             base.Start();
-            defaultSpeed = speed;
+            defaultSpeed = moveSpeed;
             destination = idlePoints[0].position;
         }
 
@@ -34,7 +34,7 @@ namespace AdventureFruit
             playerDetected = Physics2D.OverlapCircle(transform.position, checkRadius, whatIsPlayer);
 
             anim.SetBool("canBeAggresive", canBeAggresive);
-            anim.SetFloat("speed", speed);
+            anim.SetFloat("speed", moveSpeed);
             idleTimeCounter -= Time.deltaTime;
             FlipController();
 
@@ -60,7 +60,7 @@ namespace AdventureFruit
 
             if (isAggresive)
             {
-                transform.position = Vector2.MoveTowards(transform.position, destination, speed * Time.deltaTime);
+                transform.position = Vector2.MoveTowards(transform.position, destination, moveSpeed * Time.deltaTime);
 
                 if (Vector2.Distance(transform.position, destination) < 0.1f)
                 {
@@ -68,13 +68,13 @@ namespace AdventureFruit
 
                     int i = Random.Range(0, idlePoints.Length);
                     destination = idlePoints[i].position;
-                    speed *= 0.5f;
+                    moveSpeed *= 0.5f;
                 }
 
             }
             else
             {
-                transform.position = Vector2.MoveTowards(transform.position, destination, speed * Time.deltaTime);
+                transform.position = Vector2.MoveTowards(transform.position, destination, moveSpeed * Time.deltaTime);
 
                 if (Vector2.Distance(transform.position, destination) < 0.1f)
                 {
@@ -82,7 +82,7 @@ namespace AdventureFruit
                     {
                         canBeAggresive = true;
                         idleTimeCounter = idleTime;
-                        speed = defaultSpeed;
+                        moveSpeed = defaultSpeed;
                     }
                 }
             }
@@ -94,15 +94,15 @@ namespace AdventureFruit
             if (player == null)
                 return; 
 
-            if (destination.x > transform.position.x && facedirection == -1)
+            if (destination.x > transform.position.x && facingDirection == -1)
             {
                 Flip();
-                facedirection = 1;
+                facingDirection = 1;
             }
-            else if (destination.x < transform.position.x && facedirection == 1)
+            else if (destination.x < transform.position.x && facingDirection == 1)
             {
                 Flip();
-                facedirection = -1;
+                facingDirection = -1;
             }
         }
 

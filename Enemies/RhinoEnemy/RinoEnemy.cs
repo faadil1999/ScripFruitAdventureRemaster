@@ -32,7 +32,7 @@ namespace AdventureFruit
             }
             //Algo Rhino for charging player when the player is near by the rhino
             bool playerDetected = playerDetection.collider.GetComponent<Player>() != null;
-            isWall = Physics2D.Raycast(wallCheck.position, Vector2.right * facedirection, distanceWallCheck, whatIsGround);
+            isWallDetected = Physics2D.Raycast(wallCheck.position, Vector2.right * facingDirection, distanceWallCheck, whatIsGround);
             if (playerDetected)
             { isAggresive = true; } 
 
@@ -42,15 +42,15 @@ namespace AdventureFruit
             }
             else
             {
-                rb.velocity = new Vector2(chargeSpeed * facedirection, rb.velocity.y);
+                rb.velocity = new Vector2(chargeSpeed * facingDirection, rb.velocity.y);
 
-                if (!groundDetected) 
+                if (!isGrounded) 
                 {
                     Flip();
                     isAggresive = false;
                 }
 
-                if(isWall && isInvincible)
+                if(isWallDetected && isInvincible)
                 {   
                     //Rhino stunned audio
                     SFXAudioRhino.clip = stunnedClip;
@@ -69,13 +69,7 @@ namespace AdventureFruit
                 }
                 shockTimeCounter -= Time.deltaTime;
             }
-
-
-
-
         }
-
-
         protected override void AnimationController()
         {
             base.AnimationController();

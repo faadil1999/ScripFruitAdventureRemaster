@@ -49,7 +49,7 @@ namespace AdventureFruit
                 rb.gravityScale = fallingGravity;
             }
 
-            if (groundDetected && idleTimeCounter < 0)
+            if (isGrounded && idleTimeCounter < 0)
             {
                 isFalling = false;
             }
@@ -68,7 +68,7 @@ namespace AdventureFruit
         //Function for fly event
         private void FlyEvent()
         {
-            rb.velocity = new Vector2(speed * facedirection, currentFlyForce);
+            rb.velocity = new Vector2(moveSpeed * facingDirection, currentFlyForce);
         }
 
         protected override void CollisionCheck()
@@ -81,7 +81,7 @@ namespace AdventureFruit
         protected override void AnimationController()
         {
             anim.SetBool("isFalling", isFalling);
-            anim.SetBool("isGrounded", groundDetected);
+            anim.SetBool("isGrounded", isGrounded);
         }
     }
 }

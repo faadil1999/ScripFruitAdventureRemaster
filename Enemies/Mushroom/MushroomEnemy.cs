@@ -4,11 +4,12 @@ using UnityEngine;
 
 namespace AdventureFruit
 {
-    public class Mushroom_enemy : Enemy
+    public class MushroomEnemy : Enemy
     {
         protected override void Start()
         {
             base.Start();
+            facingDirection = -1;
         }
         private void Update()
         {

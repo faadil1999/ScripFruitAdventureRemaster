@@ -40,7 +40,7 @@ namespace AdventureFruit
         {
             GameObject bullet = Instantiate(bulletprefab, shoot_position.transform.position, shoot_position.transform.rotation);
 
-            bullet.GetComponent<Bullet_Plant>().SetupSpeed(speed * facedirection, 0);
+            bullet.GetComponent<Bullet_Plant>().SetupSpeed(moveSpeed * facingDirection, 0);
         }
 
     }
