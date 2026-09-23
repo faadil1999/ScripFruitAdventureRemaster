@@ -6,7 +6,7 @@ using AdventureFruit.Core.StateMachine;
 
 namespace AdventureFruit
 {
-    public class Player : MonoBehaviour
+    public class Player : GamePersona
     {
         [Header("Player controls info")]
         public VariableJoystick joystick;
@@ -16,10 +16,6 @@ namespace AdventureFruit
         private float xInput;
         private float yInput;
 
-        [Header("Move info")]
-        [SerializeField] private float moveSpeed;
-        [SerializeField] private float jumpForce;
-        public Rigidbody2D rb;
         public Vector2 wallJumpDirection;
         [Tooltip("Downward speed while wall sliding and holding down")]
         public float wallSlideFastSpeed = 4f;
@@ -27,36 +23,20 @@ namespace AdventureFruit
         private float playerGravityScale;
         private bool readyToLand;
 
+        //delete later
         [Header("Particles")]
         [SerializeField] private ParticleSystem dustFx;
         [SerializeField] private float dustFxTimer = 0.7f;
         private float dustFxCounter;
 
-        [Header("Collision info")]
-
-    //ground and wall detection stuffs
-        [SerializeField] private LayerMask whatIsGround;
-        [SerializeField] private LayerMask whatIsWall;
-        [SerializeField] private float groundCheckDistance;
-                         private bool isGrounded;
+        //delete later
         public bool canDoubleJump = true;
                          public Animator anim;
-                         public bool canMove;
 
         //enemy detection stuffs
         [SerializeField] private Transform enemyCheckcenter;
         [SerializeField] private float enemyCheckRadius;
 
-    //wall detection stuffs
-
-        public float wallCheckDistance;
-        private bool isWallDetected;
-
-        private bool canWallSlide;
-        private bool isWallSliding;
-
-        private bool facingRight = true ;
-        private int facingDirection = 1;
 
         // Bufferjump and cayotejump
         [Header("Buffer and Cayote info")]
@@ -69,7 +49,6 @@ namespace AdventureFruit
         [Header("KnockBack")]
 
         [SerializeField] private Vector2 knockDirection;
-                         public bool isKnocked;
         [SerializeField] private float knockbackTime;
                          private bool canbeKnockback = true;
         [SerializeField] private float protectionTime;

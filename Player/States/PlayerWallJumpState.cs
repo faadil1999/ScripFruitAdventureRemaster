@@ -6,7 +6,7 @@ namespace AdventureFruit
     /// <summary>
     /// Jump off a wall. The horizontal direction follows the player's horizontal input
     /// (xInput); with no input the jump is straight up. Speed and height come from
-    /// <see cref="Player.wallJumpDirection"/> (x = horizontal speed, y = vertical speed).
+    /// <see cref="Player.wallJumpDirection"/> (x = horizontal moveSpeed, y = vertical moveSpeed).
     /// </summary>
     public class PlayerWallJumpState : PlayerState
     {

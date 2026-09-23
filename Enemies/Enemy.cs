@@ -5,19 +5,14 @@ using UnityEngine;
 
 namespace AdventureFruit
 {
-    public class Enemy : HitZoneable
+    public class Enemy : GamePersona
     {
 
-        [SerializeField] protected float speed;
         [SerializeField] protected float idleTime = 3;
         protected RaycastHit2D playerDetection;
         protected float idleTimeCounter;
         protected bool isAggresive;
 
-        public Animator anim;
-                         protected Rigidbody2D rb;
-        [SerializeField] protected LayerMask whatIsGround;
-        [SerializeField] protected float distanceGroundCheck;
         [SerializeField] protected float distanceIsGrounded;
         [SerializeField] protected float distanceWallCheck;
         [SerializeField] protected float distancePlayerDetection;
@@ -28,12 +23,14 @@ namespace AdventureFruit
         [Header("FX")]
         [SerializeField] protected GameObject deathFx;
 
-        protected bool groundDetected;
-        protected bool isGrounded;
+        [Header("Collision info")]
+        public float wallCheckDistance;
+
+        protected bool canWallSlide;
+        protected bool isWallSliding;
+
+        //delete later
         protected bool isMoving;
-        protected bool isWall;
-        protected bool isKnocked;
-        protected int facedirection = -1;
         protected bool isInvincible = false;
         protected Transform player;
 
@@ -101,17 +98,16 @@ namespace AdventureFruit
         //Flip the character
         protected void Flip ()
         {
-            facedirection *= -1;
+            facingDirection *= -1;
             transform.Rotate(0, 180, 0);
         }
 
         //For collision check
         protected virtual void CollisionCheck()
         {
-            groundDetected = Physics2D.Raycast(groundCheck.position, Vector2.down, distanceGroundCheck , whatIsGround);
-            isWall = Physics2D.Raycast(wallCheck.position, Vector2.right*facedirection , distanceWallCheck , whatIsGround);
-            isGrounded = Physics2D.Raycast(transform.position, Vector2.down, distanceIsGrounded, whatIsGround);
-            playerDetection = Physics2D.Raycast(wallCheck.position, Vector2.right * facedirection, distancePlayerDetection, ~whatToIgnore);
+            isWallDetected = Physics2D.Raycast(wallCheck.position, Vector2.right*facingDirection , distanceWallCheck , whatIsGround);
+            isGrounded = Physics2D.Raycast(groundCheck.position, Vector2.down, groundCheckDistance, whatIsGround);
+            playerDetection = Physics2D.Raycast(wallCheck.position, Vector2.right * facingDirection, distancePlayerDetection, ~whatToIgnore);
         }
 
         //Drawing for collisionCheck
@@ -119,12 +115,12 @@ namespace AdventureFruit
         {
             if(groundCheck != null)
             {
-                Gizmos.DrawLine(groundCheck.position, new Vector2(groundCheck.position.x , groundCheck.position.y - distanceGroundCheck));
+                Gizmos.DrawLine(groundCheck.position, new Vector2(groundCheck.position.x , groundCheck.position.y - groundCheckDistance));
             }
             if(wallCheck != null)
             {
-                Gizmos.DrawLine(wallCheck.position, new Vector2(wallCheck.position.x + (distanceWallCheck * facedirection) , wallCheck.position.y));
-                Gizmos.DrawLine(wallCheck.position, new Vector2(wallCheck.position.x + playerDetection.distance * facedirection, wallCheck.position.y));
+                Gizmos.DrawLine(wallCheck.position, new Vector2(wallCheck.position.x + (distanceWallCheck * facingDirection) , wallCheck.position.y));
+                Gizmos.DrawLine(wallCheck.position, new Vector2(wallCheck.position.x + playerDetection.distance * facingDirection, wallCheck.position.y));
             }
             Gizmos.DrawLine(transform.position, new Vector2(transform.position.x , transform.position.y - distanceIsGrounded));
         }
@@ -146,14 +142,14 @@ namespace AdventureFruit
             idleTimeCounter -= Time.deltaTime;
             if (idleTimeCounter <= 0 && canMove)
             {
-                rb.velocity = new Vector2(speed * facedirection, rb.velocity.y);
+                rb.velocity = new Vector2(moveSpeed * facingDirection, rb.velocity.y);
             }
             else
             {
                 rb.velocity = new Vector2(0, 0);
             }
 
-            if (isWall || !groundDetected)
+            if (isWallDetected || !isGrounded)
             {
                 isMoving = false;
                 Flip();
