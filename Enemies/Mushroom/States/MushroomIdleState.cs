@@ -7,14 +7,17 @@ namespace AdventureFruit
 {
     public class MushroomIdleState : EnemyState
     {
-       
-        public MushroomIdleState(Enemy _enemy, StateMachine _stateMchine, string _animName) : base(_enemy, _stateMchine, _animName)
+       MushroomEnemy mushroomEnemy;
+        public MushroomIdleState(Enemy _baseenemy, StateMachine _stateMchine, string _animName, MushroomEnemy _enemy) : base(_baseenemy, _stateMchine, _animName)
         {
+            this.mushroomEnemy = _enemy;
         }
 
         public override void Enter()
         {
             base.Enter();
+            this.mushroomEnemy.ZeroVelocity();
+            this.stateTimer = this.mushroomEnemy.idleTime;
         }
 
         public override void Exit()
@@ -25,6 +28,10 @@ namespace AdventureFruit
         public override void Update()
         {
             base.Update();
+            if (stateTimer <0f)
+            {
+                this.mushroomEnemy.stateMachine.ChangeState(mushroomEnemy.moveState);
+            }
         }
     }
 }

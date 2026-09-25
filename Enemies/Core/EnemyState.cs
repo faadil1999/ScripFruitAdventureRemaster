@@ -8,10 +8,11 @@ namespace AdventureFruit
     public class EnemyState : State
     {
         protected string animName;
-        protected Enemy enemy;
+        protected Enemy baseEnemy;
+
         public EnemyState(Enemy _enemy,StateMachine _stateMchine, string _animName) : base(_stateMchine)
         {
-            this.enemy = _enemy;
+            this.baseEnemy = _enemy;
             this.animName = _animName;
 
         }
@@ -19,18 +20,22 @@ namespace AdventureFruit
         public override void Enter()
         {
             base.Enter();
-            this.enemy.anim.SetBool(animName, true);
+            rb = baseEnemy.rb;
+            this.baseEnemy.anim.SetBool(animName, true);
+            triggerCalled = false;
+
         }
 
         public override void Exit()
         {
             base.Exit();
-            this.enemy.anim.SetBool(animName, false);
+            this.baseEnemy.anim.SetBool(animName, false);
         }
 
         public override void Update()
         {
             base.Update();
+            stateTimer -= Time.deltaTime;
         }
     }
 }

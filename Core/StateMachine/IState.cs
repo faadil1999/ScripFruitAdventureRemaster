@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace AdventureFruit.Core.StateMachine
 {
     /// <summary>
@@ -8,6 +10,10 @@ namespace AdventureFruit.Core.StateMachine
     public abstract class State
     {
         protected StateMachine stateMachine;
+        protected float stateTimer;
+        protected bool triggerCalled = false;
+        protected Rigidbody2D rb;
+
         protected State(StateMachine _stateMchine)
         {
             this.stateMachine = _stateMchine;
@@ -16,7 +22,6 @@ namespace AdventureFruit.Core.StateMachine
         /// <summary>Called once when the machine enters this state.</summary>
         public virtual void Enter()
         {
-
         }
 
         /// <summary>Called every frame from the owner's <c>Update</c>.</summary>
@@ -28,6 +33,10 @@ namespace AdventureFruit.Core.StateMachine
         public virtual void Exit()
         {
 
+        }
+        public virtual void AnimationFinishedTrigger()
+        {
+            triggerCalled = true;
         }
     }
 }

@@ -6,7 +6,7 @@ namespace AdventureFruit
 {
     public class Bee_enemy : Enemy
     {
-        // All about the bee enemy
+        // All about the bee baseEnemy
         [Header("Bee specific")]
         [SerializeField] private Transform[] idlePoints;
         [SerializeField] private LayerMask whatIsPlayer;

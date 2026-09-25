@@ -15,9 +15,12 @@ namespace AdventureFruit
         [SerializeField] protected float jumpForce;
 
         [Header("Collision info")]
+        [SerializeField] protected Transform groundCheck;
         [SerializeField] protected LayerMask whatIsGround;
         [SerializeField] protected LayerMask whatIsWall;
         [SerializeField] protected float groundCheckDistance;
+        [SerializeField] protected float wallCheckDistance;
+
         protected bool isGrounded;
         public Animator anim;
         public bool canMove;
@@ -35,25 +38,12 @@ namespace AdventureFruit
         [SerializeField] private float dustFxTimer = 0.7f;
         private float dustFxCounter;
 
-        public float wallCheckDistance;
         protected bool isWallDetected;
 
         protected bool canWallSlide;
         protected bool isWallSliding;
 
-        // Start is called before the first frame update
-        void Start()
-        {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
-
-        private void Flip()
+        public void Flip()
         {
             if (dustFxCounter < 0)
             {
@@ -76,7 +66,13 @@ namespace AdventureFruit
         }
         public bool IsWallDetected() => this.isWallDetected = Physics2D.Raycast(transform.position, Vector2.right * facingDirection, wallCheckDistance, whatIsWall);
 
-        public bool IsGroundDetected() => this.isGrounded = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, whatIsGround);
+        public bool IsGroundDetected() {
+            if(groundCheck == null)
+            {
+                groundCheck = transform;
+            }
+            return this.isGrounded = Physics2D.Raycast(groundCheck.position, Vector2.down, groundCheckDistance, whatIsGround);
+        }
 
         //<summary> For setting isGrounded value </summary>
         public void SetIsGrounded(bool _isGrounded)
@@ -87,6 +83,11 @@ namespace AdventureFruit
         public float GetMoveSpeed()
         {
             return this.moveSpeed;
+        }
+
+        public int GetFacingDirection()
+        {
+            return this.facingDirection;
         }
 
         public void SetCanMove(bool _canMove)

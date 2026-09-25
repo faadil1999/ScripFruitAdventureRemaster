@@ -33,10 +33,9 @@ namespace AdventureFruit
         public bool canDoubleJump = true;
                          public Animator anim;
 
-        //enemy detection stuffs
+        //baseEnemy detection stuffs
         [SerializeField] private Transform enemyCheckcenter;
         [SerializeField] private float enemyCheckRadius;
-
 
         // Bufferjump and cayotejump
         [Header("Buffer and Cayote info")]
@@ -112,7 +111,7 @@ namespace AdventureFruit
             stateMachine.currentState.Update();
             //InputChecks();
            /* dashCounterTime -= Time.deltaTime;
-            //enemy damage
+            //baseEnemy damage
             EnemyDamage();
 
             bufferJumpCounter -= Time.deltaTime;
@@ -219,7 +218,7 @@ namespace AdventureFruit
             rb.gravityScale = playerGravityScale;
         }
 
-        //function for stopping flipping after killing an enemy
+        //function for stopping flipping after killing an baseEnemy
         public void StopFlipping()
         {
             anim.SetBool("flipping", false);

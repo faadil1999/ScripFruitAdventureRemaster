@@ -9,11 +9,8 @@ namespace AdventureFruit
     {
         protected Player player;
         protected string animName;
-        protected Rigidbody2D rb;
         protected float xInput;
         protected float yInput;
-        protected float stateTimer;
-        protected bool triggerCalled = false;
 
 
         public PlayerState(Player _player, StateMachine _stateMchine,string animName) : base(_stateMchine)
@@ -44,11 +41,6 @@ namespace AdventureFruit
             yInput = Input.GetAxisRaw("Vertical");
             player.anim.SetFloat("yVelocity", rb.velocity.y);
 
-        }
-
-        public virtual void AnimationFinishedTrigger()
-        {
-            triggerCalled = true;
         }
     }
 }

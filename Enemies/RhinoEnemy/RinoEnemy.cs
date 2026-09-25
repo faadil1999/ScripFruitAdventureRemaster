@@ -32,7 +32,7 @@ namespace AdventureFruit
             }
             //Algo Rhino for charging player when the player is near by the rhino
             bool playerDetected = playerDetection.collider.GetComponent<Player>() != null;
-            isWallDetected = Physics2D.Raycast(wallCheck.position, Vector2.right * facingDirection, distanceWallCheck, whatIsGround);
+            isWallDetected = Physics2D.Raycast(wallCheck.position, Vector2.right * facingDirection, wallCheckDistance, whatIsGround);
             if (playerDetected)
             { isAggresive = true; } 
 

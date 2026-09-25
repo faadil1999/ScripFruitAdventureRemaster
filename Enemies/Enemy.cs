@@ -7,24 +7,18 @@ namespace AdventureFruit
 {
     public class Enemy : GamePersona
     {
-
-        [SerializeField] protected float idleTime = 3;
+        public float idleTime = 3;
         protected RaycastHit2D playerDetection;
         protected float idleTimeCounter;
         protected bool isAggresive;
 
         [SerializeField] protected float distanceIsGrounded;
-        [SerializeField] protected float distanceWallCheck;
         [SerializeField] protected float distancePlayerDetection;
-        [SerializeField] protected Transform groundCheck;
         [SerializeField] protected Transform wallCheck;
         [SerializeField] protected LayerMask whatToIgnore;
 
         [Header("FX")]
         [SerializeField] protected GameObject deathFx;
-
-        [Header("Collision info")]
-        public float wallCheckDistance;
 
         protected bool canWallSlide;
         protected bool isWallSliding;
@@ -57,7 +51,7 @@ namespace AdventureFruit
 
             }
 
-            anim = GetComponent<Animator>();
+            this.anim = GetComponent<Animator>();
             rb = GetComponent<Rigidbody2D>();
             if(groundCheck == null)
             {
@@ -67,6 +61,9 @@ namespace AdventureFruit
             {
                 wallCheck = transform;
             }
+        }
+        protected virtual void Update()
+        {
         }
 
         public virtual void Damage()
@@ -105,8 +102,8 @@ namespace AdventureFruit
         //For collision check
         protected virtual void CollisionCheck()
         {
-            isWallDetected = Physics2D.Raycast(wallCheck.position, Vector2.right*facingDirection , distanceWallCheck , whatIsGround);
-            isGrounded = Physics2D.Raycast(groundCheck.position, Vector2.down, groundCheckDistance, whatIsGround);
+            this.IsWallDetected();
+            this.IsGroundDetected();
             playerDetection = Physics2D.Raycast(wallCheck.position, Vector2.right * facingDirection, distancePlayerDetection, ~whatToIgnore);
         }
 
@@ -119,7 +116,7 @@ namespace AdventureFruit
             }
             if(wallCheck != null)
             {
-                Gizmos.DrawLine(wallCheck.position, new Vector2(wallCheck.position.x + (distanceWallCheck * facingDirection) , wallCheck.position.y));
+                Gizmos.DrawLine(wallCheck.position, new Vector2(wallCheck.position.x + (wallCheckDistance * facingDirection) , wallCheck.position.y));
                 Gizmos.DrawLine(wallCheck.position, new Vector2(wallCheck.position.x + playerDetection.distance * facingDirection, wallCheck.position.y));
             }
             Gizmos.DrawLine(transform.position, new Vector2(transform.position.x , transform.position.y - distanceIsGrounded));

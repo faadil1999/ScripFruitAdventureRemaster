@@ -83,7 +83,7 @@ namespace AdventureFruit
             base.CollisionCheck();
             playerDetected = Physics2D.OverlapCircle(transform.position, checkRadius, whatIsPlayer);
             groundBehind = Physics2D.Raycast(groundBehindCheck.position, Vector2.down, groundCheckDistance, whatIsGround);
-            wallBehind = Physics2D.Raycast(wallCheck.position, Vector2.right * (-facingDirection + 1), distanceWallCheck, whatIsGround);
+            wallBehind = Physics2D.Raycast(wallCheck.position, Vector2.right * (-facingDirection + 1), wallCheckDistance, whatIsGround);
         }
 
         private void AttackEvent()
